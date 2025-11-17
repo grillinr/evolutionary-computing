@@ -2,12 +2,21 @@ use crate::fitness::Fitness;
 use rand::prelude::*;
 use rand_chacha::ChaCha8Rng;
 
+pub struct GAParameters {
+    pub pop_size: usize,
+    pub mem_size: usize,
+    pub mutation_rate: f64,
+    pub crossover_rate: f64,
+    pub max_iters: usize,
+    pub convergence_threshold: f64,
+}
+
 // Creates a population of random bitstrings with specified size and member length
-fn init_population(pop_size: usize, mem_size: usize, rng: &mut ChaCha8Rng) -> Vec<String> {
+fn init_population(params: &GAParameters, rng: &mut ChaCha8Rng) -> Vec<String> {
     let mut population = Vec::new();
-    for _ in 0..pop_size {
+    for _ in 0..params.pop_size {
         let mut member: String = String::new();
-        for _ in 0..mem_size {
+        for _ in 0..params.mem_size {
             let bit = if rng.random() { '1' } else { '0' };
             member.push(bit);
         }
@@ -174,38 +183,33 @@ fn check_convergence(
     pct_identical >= threshold
 }
 
-// Ignore warning
-#[allow(clippy::too_many_arguments)]
 pub fn sga(
     fitness_fn: &impl Fitness,
-    pop_size: usize,
-    mem_size: usize,
-    mutation_rate: f64,
-    crossover_rate: f64,
-    max_iters: usize,
-    convergence_threshold: f64,
+    params: &GAParameters,
     rng: &mut ChaCha8Rng,
 ) -> Vec<String> {
     // Initialize population
-    let mut population = init_population(pop_size, mem_size, rng);
+    let mut population = init_population(params, rng);
     let mut cumulative_evals = 0;
 
     // Print algorithm parameters
     println!(
-        "Running Dejong Rosenbrock GA with Pop={pop_size} MemberSize={mem_size} Mutation={mutation_rate} Crossover={crossover_rate}"
+        "Running Dejong Rosenbrock GA with Pop={} MemberSize={} Mutation={} Crossover={}",
+        params.pop_size, params.mem_size, params.mutation_rate, params.crossover_rate
     );
 
-    for gen_number in 0..max_iters {
+    for gen_number in 0..params.max_iters {
         // Calculate and print statistics
         let (max_fitness, avg_fitness, _, diversity) =
-            calculate_stats(&population, fitness_fn, mem_size / 2);
-        cumulative_evals += pop_size;
+            calculate_stats(&population, fitness_fn, params.mem_size / 2);
+        cumulative_evals += params.pop_size;
         println!(
-            "Dejong Rosenbrock GA {pop_size} {pop_size} {mutation_rate} {crossover_rate} {gen_number} {cumulative_evals} {max_fitness} {avg_fitness} {diversity}"
+            "Dejong Rosenbrock GA {} {} {} {} {} {} {} {} {}",
+            params.pop_size, params.pop_size, params.mutation_rate, params.crossover_rate, gen_number, cumulative_evals, max_fitness, avg_fitness, diversity
         );
 
         // Check for convergence
-        if check_convergence(&population, fitness_fn, mem_size / 2, convergence_threshold) {
+        if check_convergence(&population, fitness_fn, params.mem_size / 2, params.convergence_threshold) {
             println!("Converged at generation {gen_number}");
             return population;
         }
@@ -214,26 +218,26 @@ pub fn sga(
         let mut new_population = Vec::new();
 
         // Generate offspring pairs until we have a full new population
-        while new_population.len() < pop_size {
+        while new_population.len() < params.pop_size {
             // Select parents
-            let (parent1, parent2) = parent_selection(&population, mem_size / 2, fitness_fn, rng);
+            let (parent1, parent2) = parent_selection(&population, params.mem_size / 2, fitness_fn, rng);
 
             // Crossover
-            let (mut child1, mut child2) = crossover(&parent1, &parent2, crossover_rate, rng);
+            let (mut child1, mut child2) = crossover(&parent1, &parent2, params.crossover_rate, rng);
 
             // Mutation
-            child1 = mutate(&child1, mutation_rate, rng);
-            child2 = mutate(&child2, mutation_rate, rng);
+            child1 = mutate(&child1, params.mutation_rate, rng);
+            child2 = mutate(&child2, params.mutation_rate, rng);
 
             // Add children to new population
             new_population.push(child1);
-            if new_population.len() < pop_size {
+            if new_population.len() < params.pop_size {
                 new_population.push(child2);
             }
         }
 
         // Ensure we have exactly pop_size individuals (handle odd pop_size case)
-        while new_population.len() > pop_size {
+        while new_population.len() > params.pop_size {
             new_population.pop();
         }
 

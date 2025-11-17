@@ -3,8 +3,8 @@ mod evol_strat;
 mod fitness;
 mod rosenbrock;
 
-use crate::bitstring::sga;
-use crate::evol_strat::evolution_strategy;
+use crate::bitstring::{GAParameters, sga};
+use crate::evol_strat::{ESParameters, evolution_strategy};
 use crate::fitness::Fitness;
 use crate::rosenbrock::Rosenbrock;
 
@@ -15,20 +15,19 @@ fn main() {
     const NUM_DIMS: usize = 10;
     // Seed the random number generator for reproducibility
     let mut rng = ChaCha8Rng::seed_from_u64(5000);
-    
+
     // Run ES for comparison
-    let final_es_pop = evolution_strategy(
-        &Rosenbrock,
-        100,           // population size (mu)
-        100,           // offspring size (lambda)
-        NUM_DIMS,      // number of dimensions
-        (-5.12, 5.11), // range for initial population
-        1.0,           // initial step size (sigma)
-        1.0 / (2.0 * NUM_DIMS as f64).sqrt(), // learning rate (tau)
-        1000,          // max generations
-        &mut rng,
-    );
-    
+    let es_params = ESParameters {
+        mu: 100,                                   // population size (mu)
+        lambda: 100,                               // offspring size (lambda)
+        mem_size: NUM_DIMS,                        // number of dimensions
+        mem_range: (-5.12, 5.11),                  // range for initial population
+        sigma: 1.0,                                // initial step size (sigma)
+        tau: 1.0 / (2.0 * NUM_DIMS as f64).sqrt(), // learning rate (tau)
+        max_gens: 1000,                            // max generations
+    };
+    let final_es_pop = evolution_strategy(&Rosenbrock, &es_params, &mut rng);
+
     // Print ES results
     println!("\n=== ES Results ===");
     for member in final_es_pop.iter().take(3) {
@@ -40,19 +39,18 @@ fn main() {
         }
         println!("...] Fitness: {fitness}");
     }
-    
+
     // Reset RNG for GA
     let mut rng = ChaCha8Rng::seed_from_u64(5000);
-    let final_ea_pop = sga(
-        &Rosenbrock,
-        100,           //population size (mu = lambda)
-        20 * NUM_DIMS, // member size (in bits)
-        0.01,          // mutation rate
-        0.75,          // crossover rate
-        1000,          // max evaluations
-        0.95,          // convergence threshold
-        &mut rng,
-    );
+    let ga_params = GAParameters {
+        pop_size: 100,               //population size (mu = lambda)
+        mem_size: 16 * NUM_DIMS,     // member size (in bits)
+        mutation_rate: 0.01,         // mutation rate
+        crossover_rate: 0.75,        // crossover rate
+        max_iters: 1000,             // max evaluations
+        convergence_threshold: 0.95, // convergence threshold
+    };
+    let final_ea_pop = sga(&Rosenbrock, &ga_params, &mut rng);
 
     // Print final populations and their fitnesses
     // ES currently disabled to focus on GA
@@ -73,7 +71,7 @@ fn main() {
         }
         println!("] Fitness: {fitness}");
     }
-    
+
     // Test a few random individuals to see typical values
     println!("\nTesting random individuals:");
     for _ in 0..5 {
