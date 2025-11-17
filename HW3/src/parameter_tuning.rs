@@ -96,6 +96,7 @@ pub struct TuningConfig {
     pub num_runs: usize,
     pub timeout_seconds: u64,
     pub num_dimensions: usize,
+    #[allow(dead_code)]
     pub bits_per_dimension: usize,
 }
 

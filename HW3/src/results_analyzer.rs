@@ -15,7 +15,7 @@ impl ResultsAnalyzer {
         
         // Write header
         let header = "algorithm,run_id,max_fitness,execution_time,score,converged,generations,timeout_reached";
-        writeln!(file, "{}", header)?;
+        writeln!(file, "{header}")?;
         
         // Write parameter headers (get all unique parameter names)
         let mut all_param_names = Vec::new();
@@ -29,7 +29,7 @@ impl ResultsAnalyzer {
         
         // Write parameter headers
         for param_name in &all_param_names {
-            write!(file, ",{}", param_name)?;
+            write!(file, ",{param_name}")?;
         }
         writeln!(file)?;
         
@@ -49,7 +49,7 @@ impl ResultsAnalyzer {
             // Write parameter values
             for param_name in &all_param_names {
                 let value = result.parameters.get(param_name).unwrap_or(&0.0);
-                write!(file, ",{}", value)?;
+                write!(file, ",{value}")?;
             }
             writeln!(file)?;
         }
@@ -74,7 +74,7 @@ impl ResultsAnalyzer {
         
         for result in &sga_results {
             let param_key = Self::ga_params_to_key(&result.parameters);
-            param_groups.entry(param_key).or_insert_with(Vec::new).push(result);
+            param_groups.entry(param_key).or_default().push(result);
             
             score_sum += result.score;
             if result.converged {
@@ -94,7 +94,7 @@ impl ResultsAnalyzer {
         let mut best_avg_score = 0.0;
         let mut best_avg_params: Option<GAParameters> = None;
         
-        for (_key, group_results) in &param_groups {
+        for group_results in param_groups.values() {
             let avg_score: f64 = group_results.iter().map(|r| r.score).sum::<f64>() / group_results.len() as f64;
             if avg_score > best_avg_score {
                 best_avg_score = avg_score;
@@ -132,7 +132,7 @@ impl ResultsAnalyzer {
         
         for result in &es_results {
             let param_key = Self::es_params_to_key(&result.parameters);
-            param_groups.entry(param_key).or_insert_with(Vec::new).push(result);
+            param_groups.entry(param_key).or_default().push(result);
             
             score_sum += result.score;
             if result.converged {
@@ -152,7 +152,7 @@ impl ResultsAnalyzer {
         let mut best_avg_score = 0.0;
         let mut best_avg_params: Option<ESParameters> = None;
         
-        for (_key, group_results) in &param_groups {
+        for group_results in param_groups.values() {
             let avg_score: f64 = group_results.iter().map(|r| r.score).sum::<f64>() / group_results.len() as f64;
             if avg_score > best_avg_score {
                 best_avg_score = avg_score;

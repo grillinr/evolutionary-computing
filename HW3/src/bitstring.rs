@@ -81,7 +81,7 @@ fn crossover(
 
 // Tournament selection
 fn tournament_selection(
-    population: &Vec<String>,
+    population: &[String],
     num_dims: usize,
     fitness_fn: &impl Fitness,
     tournament_size: usize,
@@ -107,7 +107,7 @@ fn tournament_selection(
 
 // Tournament selection for two parents
 fn parent_selection(
-    population: &Vec<String>,
+    population: &[String],
     num_dims: usize,
     fitness_fn: &impl Fitness,
     rng: &mut ChaCha8Rng,

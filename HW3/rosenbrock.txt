@@ -1,0 +1,102 @@
+Starting parameter tuning...
+Generated 25 SGA parameter combinations
+Generated 25 ES parameter combinations
+Each will be tested 5 times with 60 second timeout
+
+=== Testing SGA Parameters ===
+Testing SGA combination 1/25: pop_size=50, mutation_rate=0.001
+Testing SGA combination 2/25: pop_size=50, mutation_rate=0.050
+Testing SGA combination 3/25: pop_size=50, mutation_rate=0.100
+Testing SGA combination 4/25: pop_size=50, mutation_rate=0.150
+Testing SGA combination 5/25: pop_size=50, mutation_rate=0.200
+Testing SGA combination 6/25: pop_size=162, mutation_rate=0.001
+Testing SGA combination 7/25: pop_size=162, mutation_rate=0.050
+Testing SGA combination 8/25: pop_size=162, mutation_rate=0.100
+Testing SGA combination 9/25: pop_size=162, mutation_rate=0.150
+Testing SGA combination 10/25: pop_size=162, mutation_rate=0.200
+Testing SGA combination 11/25: pop_size=275, mutation_rate=0.001
+Testing SGA combination 12/25: pop_size=275, mutation_rate=0.050
+Testing SGA combination 13/25: pop_size=275, mutation_rate=0.100
+Testing SGA combination 14/25: pop_size=275, mutation_rate=0.150
+Testing SGA combination 15/25: pop_size=275, mutation_rate=0.200
+Testing SGA combination 16/25: pop_size=387, mutation_rate=0.001
+Testing SGA combination 17/25: pop_size=387, mutation_rate=0.050
+Testing SGA combination 18/25: pop_size=387, mutation_rate=0.100
+Testing SGA combination 19/25: pop_size=387, mutation_rate=0.150
+Testing SGA combination 20/25: pop_size=387, mutation_rate=0.200
+Testing SGA combination 21/25: pop_size=500, mutation_rate=0.001
+Testing SGA combination 22/25: pop_size=500, mutation_rate=0.050
+Testing SGA combination 23/25: pop_size=500, mutation_rate=0.100
+Testing SGA combination 24/25: pop_size=500, mutation_rate=0.150
+Testing SGA combination 25/25: pop_size=500, mutation_rate=0.200
+
+=== Testing ES Parameters ===
+Testing ES combination 1/25: lambda=50, sigma=0.100
+Testing ES combination 2/25: lambda=50, sigma=0.575
+Testing ES combination 3/25: lambda=50, sigma=1.050
+Testing ES combination 4/25: lambda=50, sigma=1.525
+Testing ES combination 5/25: lambda=50, sigma=2.000
+Testing ES combination 6/25: lambda=162, sigma=0.100
+Testing ES combination 7/25: lambda=162, sigma=0.575
+Testing ES combination 8/25: lambda=162, sigma=1.050
+Testing ES combination 9/25: lambda=162, sigma=1.525
+Testing ES combination 10/25: lambda=162, sigma=2.000
+Testing ES combination 11/25: lambda=275, sigma=0.100
+Testing ES combination 12/25: lambda=275, sigma=0.575
+Testing ES combination 13/25: lambda=275, sigma=1.050
+Testing ES combination 14/25: lambda=275, sigma=1.525
+Testing ES combination 15/25: lambda=275, sigma=2.000
+Testing ES combination 16/25: lambda=387, sigma=0.100
+Testing ES combination 17/25: lambda=387, sigma=0.575
+Testing ES combination 18/25: lambda=387, sigma=1.050
+Testing ES combination 19/25: lambda=387, sigma=1.525
+Testing ES combination 20/25: lambda=387, sigma=2.000
+Testing ES combination 21/25: lambda=500, sigma=0.100
+Testing ES combination 22/25: lambda=500, sigma=0.575
+Testing ES combination 23/25: lambda=500, sigma=1.050
+Testing ES combination 24/25: lambda=500, sigma=1.525
+Testing ES combination 25/25: lambda=500, sigma=2.000
+
+=== Saving Results ===
+Results saved to tuning_results.csv
+
+============================================================
+PARAMETER TUNING SUMMARY
+============================================================
+
+--- SGA Results ---
+Total runs: 125
+Average score: 0.000700
+Parameter combinations tested: 25
+
+Best single run parameters:
+  Population size: 387
+  Mutation rate: 0.001
+  Score: 0.006758
+
+Best average parameters:
+  Population size: 50
+  Mutation rate: 0.001
+  Average score: 0.003888
+
+--- ES Results ---
+Total runs: 125
+Average score: 0.185369
+Parameter combinations tested: 25
+
+Best single run parameters:
+  Mu: 25, Lambda: 50
+  Sigma: 2.000
+  Score: 2.311874
+
+Best average parameters:
+  Mu: 25, Lambda: 50
+  Sigma: 2.000
+  Average score: 0.873464
+
+--- Algorithm Comparison ---
+ES performs better on average
+ES avg score: 0.873464 vs SGA avg score: 0.003888
+
+Total tuning time: 45.56 minutes
+Total runs completed: 250

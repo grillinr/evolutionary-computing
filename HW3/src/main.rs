@@ -150,7 +150,7 @@ fn run_parameter_tuning() {
     // Save results to files
     println!("\n=== Saving Results ===");
     if let Err(e) = ResultsAnalyzer::save_results_to_csv(&all_results, "tuning_results.csv") {
-        eprintln!("Error saving results: {}", e);
+        eprintln!("Error saving results: {e}");
     } else {
         println!("Results saved to tuning_results.csv");
     }
