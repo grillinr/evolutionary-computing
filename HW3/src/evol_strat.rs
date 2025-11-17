@@ -2,6 +2,7 @@ use crate::fitness::Fitness;
 use rand::prelude::*;
 use rand_chacha::ChaCha8Rng;
 
+#[derive(Debug, Clone)]
 pub struct ESParameters {
     pub mu: usize,
     pub lambda: usize,

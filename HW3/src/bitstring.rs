@@ -2,6 +2,7 @@ use crate::fitness::Fitness;
 use rand::prelude::*;
 use rand_chacha::ChaCha8Rng;
 
+#[derive(Debug, Clone)]
 pub struct GAParameters {
     pub pop_size: usize,
     pub mem_size: usize,
